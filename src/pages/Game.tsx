@@ -18,29 +18,9 @@ const Board = styled.div`
   align-content: space-between;
 `;
 
-type BoardType = {
-  id: number,
-  image: string 
-}
+const images: string[] = [image1, image2, image3, image4, image5, image6, image7, image8];
 
-const initBoard: BoardType[] = [
-  {id: 0, image: image1},
-  {id: 0, image: image1},
-  {id: 1, image: image2},
-  {id: 1, image: image2},
-  {id: 2, image: image3},
-  {id: 2, image: image3},
-  {id: 3, image: image4},
-  {id: 3, image: image4},
-  {id: 4, image: image5},
-  {id: 4, image: image5},
-  {id: 5, image: image6},
-  {id: 5, image: image6},
-  {id: 6, image: image7},
-  {id: 6, image: image7},
-  {id: 7, image: image8},
-  {id: 7, image: image8},
-];
+const initBoard: number[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 
 function Game () {
   const gameBoard = initBoard.sort(() => Math.random() - 0.5);
@@ -50,7 +30,7 @@ function Game () {
       <div>짝 맞추기 게임</div>
       <Board>
         {gameBoard.map((element, index) => (
-          <Card key={index} id={element.id} image={element.image}/>
+          <Card key={index} image={images[element]}/>
         ))}
       </Board>
     </>
