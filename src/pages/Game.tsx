@@ -9,6 +9,11 @@ import image6 from "../images/image6.jpg";
 import image7 from "../images/image7.jpg";
 import image8 from "../images/image8.jpg";
 
+const Title = styled.div`
+  font-weight: bold;
+  font-size: 2rem;
+`
+
 const Board = styled.div`
   width: 500px;
   height: 600px;
@@ -27,7 +32,7 @@ function Game () {
 
   return (
     <>
-      <div>짝 맞추기 게임</div>
+      <Title>짝 맞추기 게임</Title>
       <Board>
         {gameBoard.map((element, index) => (
           <Card key={index} image={images[element]}/>

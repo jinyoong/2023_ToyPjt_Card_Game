@@ -24,6 +24,9 @@ const Back = styled.div`
   height: 100%;
   backface-visibility: hidden;
   background-color: #fdb82f;
+  :hover {
+    cursor: pointer;
+  }
 `
 
 type IndexType = {
@@ -40,9 +43,7 @@ function Card({image}: IndexType) {
       src={image}
       alt={"사진"}
       />
-      <Back>
-        뒷면
-      </Back>
+      <Back></Back>
     </Image>
   )
 };
