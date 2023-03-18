@@ -30,18 +30,26 @@ const Back = styled.div`
 `
 
 type IndexType = {
+  number: number;
   image: string;
+  open: number[];
+  setOpen: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-function Card({image}: IndexType) {
+function Card({ number, image, open, setOpen }: IndexType) {
 
   const [isFront, setIsFront] = useState<boolean>(false);
 
+  function changeStatus() {
+    setIsFront(true);
+    setOpen([...open, number])
+  }
+
   return (
-    <Image isFront={isFront} onClick={() => setIsFront(true)}>
+    <Image isFront={isFront} onClick={() => !isFront && changeStatus()}>
       <Front
-      src={image}
-      alt={"사진"}
+        src={image}
+        alt={"사진"}
       />
       <Back></Back>
     </Image>
