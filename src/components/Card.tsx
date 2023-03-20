@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 const Image = styled.div<{ isFront: boolean }>`
   position: relative;
@@ -33,11 +32,12 @@ type IndexType = {
   number: number;
   image: string;
   openRef: React.RefObject<number[]>;
+  checkRef: React.RefObject<boolean>;
+  click: boolean;
+  setClick: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Card({ number, image, openRef }: IndexType) {
-
-  const [isFront, setIsFront] = useState<boolean>(false);
+function Card({ number, image, openRef, checkRef, click, setClick }: IndexType) {
 
   function changeStatus() {
     const open = openRef.current;
@@ -48,30 +48,14 @@ function Card({ number, image, openRef }: IndexType) {
 
     if (open.includes(number)) {
       return;
-    };
+    }
 
     open.push(number);
-    setIsFront(true);
-
-    console.log(open);
-
-    if (open.length % 2 === 1) {
-      return;
-    };
-
-    if (open[open.length - 1] !== open[open.length - 2]) {
-      setTimeout(() => {
-        const id1 = open.pop();
-        const id2 = open.pop();
-
-        console.log(id1, id2);
-        setIsFront(false);
-      }, 500);
-    };
+    setClick(!click);
   };
 
   return (
-    <Image isFront={isFront} onClick={() => !isFront && changeStatus()}>
+    <Image isFront={openRef.current?.includes(number) ? true : false} onClick={() => !checkRef.current && changeStatus()}>
       <Front
         src={image}
         alt={"사진"}
