@@ -32,18 +32,43 @@ const Back = styled.div`
 type IndexType = {
   number: number;
   image: string;
-  open: number[];
-  setOpen: React.Dispatch<React.SetStateAction<number[]>>;
+  openRef: React.RefObject<number[]>;
 }
 
-function Card({ number, image, open, setOpen }: IndexType) {
+function Card({ number, image, openRef }: IndexType) {
 
   const [isFront, setIsFront] = useState<boolean>(false);
 
   function changeStatus() {
+    const open = openRef.current;
+
+    if (!open) {
+      return;
+    };
+
+    if (open.includes(number)) {
+      return;
+    };
+
+    open.push(number);
     setIsFront(true);
-    setOpen([...open, number])
-  }
+
+    console.log(open);
+
+    if (open.length % 2 === 1) {
+      return;
+    };
+
+    if (open[open.length - 1] !== open[open.length - 2]) {
+      setTimeout(() => {
+        const id1 = open.pop();
+        const id2 = open.pop();
+
+        console.log(id1, id2);
+        setIsFront(false);
+      }, 500);
+    };
+  };
 
   return (
     <Image isFront={isFront} onClick={() => !isFront && changeStatus()}>
