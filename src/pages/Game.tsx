@@ -29,36 +29,58 @@ const images: string[] = [image1, image2, image3, image4, image5, image6, image7
 const initBoard: number[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 
 function Game () {
-  const openRef = useRef<number[]>([]);
-  const checkRef = useRef<boolean>(false);
+  const openRef = useRef<number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+  const checkRef = useRef<boolean>(true);
+  const initRef = useRef<boolean>(true);
   const [click, setClick] = useState<boolean>(true);
   const gameBoard = useMemo(() => initBoard.sort(() => Math.random() - 0.5), []);
 
-  useEffect(() => {
+  console.log("Game 컴포넌트 렌더링")
+
+  function checkCard() {
     const open = openRef.current;
-
-    if (open.length % 2 === 1 || open.length === 0) {
-      return;
-    };
-
+  
     if (open.length === gameBoard.length) {
       console.log("승리");
+    };
+  
+    if (open.length % 2 === 1) {
+      return;
     };
 
     const current = gameBoard[open[open.length - 1]];
     const before = gameBoard[open[open.length - 2]];
 
+    console.log("현재 검증 상태 : ", checkRef.current);
+
+    if (checkRef.current === true) {
+      return;
+    };
+  
     if (current !== before) {
       checkRef.current = true;
-
+  
       setTimeout(() => {
         open.pop();
         open.pop();
         setClick(!click);
         checkRef.current = false;
       }, 500)
-    }
-  }, [click, gameBoard])
+    };
+  };
+
+  if (!initRef.current) {
+    checkCard();
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      openRef.current = [];
+      checkRef.current = false;
+      initRef.current = false;
+      setClick(false);
+    }, 2000)
+  }, []);
 
   return (
     <>
