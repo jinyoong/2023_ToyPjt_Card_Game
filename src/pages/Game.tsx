@@ -8,7 +8,7 @@ import image5 from "../images/image5.jpg";
 import image6 from "../images/image6.jpg";
 import image7 from "../images/image7.jpg";
 import image8 from "../images/image8.jpg";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 
 const Title = styled.div`
   font-weight: bold;
@@ -51,8 +51,6 @@ function Game () {
     const current = gameBoard[open[open.length - 1]];
     const before = gameBoard[open[open.length - 2]];
 
-    console.log("현재 검증 상태 : ", checkRef.current);
-
     if (checkRef.current === true) {
       return;
     };
@@ -71,16 +69,14 @@ function Game () {
 
   if (!initRef.current) {
     checkCard();
-  };
-
-  useEffect(() => {
+  } else {
     setTimeout(() => {
       openRef.current = [];
       checkRef.current = false;
       initRef.current = false;
       setClick(false);
     }, 2000)
-  }, []);
+  }
 
   return (
     <>
