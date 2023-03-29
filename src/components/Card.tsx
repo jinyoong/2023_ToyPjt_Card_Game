@@ -28,7 +28,7 @@ const Back = styled.div`
   }
 `
 
-type IndexType = {
+type PropsType = {
   number: number;
   image: string;
   openRef: React.RefObject<number[]>;
@@ -37,7 +37,7 @@ type IndexType = {
   setClick: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Card({ number, image, openRef, checkRef, click, setClick }: IndexType) {
+function Card({ number, image, openRef, checkRef, click, setClick }: PropsType) {
 
   function changeStatus() {
     const open = openRef.current;

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Card from "../components/Card";
+import Modal from "../components/Modal";
 import image1 from "../images/image1.jpg";
 import image2 from "../images/image2.jpg";
 import image3 from "../images/image3.jpg";
@@ -8,7 +9,7 @@ import image5 from "../images/image5.jpg";
 import image6 from "../images/image6.jpg";
 import image7 from "../images/image7.jpg";
 import image8 from "../images/image8.jpg";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 
 const Title = styled.div`
   font-weight: bold;
@@ -31,17 +32,17 @@ const initBoard: number[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 function Game () {
   const openRef = useRef<number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
   const checkRef = useRef<boolean>(true);
-  const initRef = useRef<boolean>(true);
+  const isSuccessRef = useRef<boolean>(true);
+  const [initRender, setInitRender] = useState<boolean>(true);
   const [click, setClick] = useState<boolean>(true);
+  const [restart, setRestart] = useState<boolean>(true);
   const gameBoard = useMemo(() => initBoard.sort(() => Math.random() - 0.5), []);
-
-  console.log("Game 컴포넌트 렌더링")
-
+  
   function checkCard() {
     const open = openRef.current;
   
     if (open.length === gameBoard.length) {
-      console.log("승리");
+      isSuccessRef.current = true;
     };
   
     if (open.length % 2 === 1) {
@@ -67,19 +68,32 @@ function Game () {
     };
   };
 
-  if (!initRef.current) {
+  if (!initRender) {
     checkCard();
-  } else {
-    setTimeout(() => {
+  }
+
+  useEffect(() => {
+    isSuccessRef.current = false;
+    openRef.current = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    checkRef.current = true;
+    setInitRender(true);
+
+    const init = setTimeout(() => {
       openRef.current = [];
       checkRef.current = false;
-      initRef.current = false;
-      setClick(false);
+      setInitRender(false);
     }, 2000)
-  }
+
+    return () => clearTimeout(init)
+  }, [restart])
 
   return (
     <>
+      {isSuccessRef.current ? 
+      <Modal 
+        restart={restart}
+        setRestart={setRestart}
+      /> : <></>}
       <Title>짝 맞추기 게임</Title>
       <Board>
         {gameBoard.map((element, index) => (
