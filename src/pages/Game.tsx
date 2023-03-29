@@ -8,6 +8,12 @@ import image5 from "../images/image5.jpg";
 import image6 from "../images/image6.jpg";
 import image7 from "../images/image7.jpg";
 import image8 from "../images/image8.jpg";
+import { useMemo, useRef, useState } from "react";
+
+const Title = styled.div`
+  font-weight: bold;
+  font-size: 2rem;
+`
 
 const Board = styled.div`
   width: 500px;
@@ -18,39 +24,74 @@ const Board = styled.div`
   align-content: space-between;
 `;
 
-type BoardType = {
-  id: number,
-  image: string 
-}
+const images: string[] = [image1, image2, image3, image4, image5, image6, image7, image8];
 
-const initBoard: BoardType[] = [
-  {id: 0, image: image1},
-  {id: 0, image: image1},
-  {id: 1, image: image2},
-  {id: 1, image: image2},
-  {id: 2, image: image3},
-  {id: 2, image: image3},
-  {id: 3, image: image4},
-  {id: 3, image: image4},
-  {id: 4, image: image5},
-  {id: 4, image: image5},
-  {id: 5, image: image6},
-  {id: 5, image: image6},
-  {id: 6, image: image7},
-  {id: 6, image: image7},
-  {id: 7, image: image8},
-  {id: 7, image: image8},
-];
+const initBoard: number[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 
 function Game () {
-  const gameBoard = initBoard.sort(() => Math.random() - 0.5);
+  const openRef = useRef<number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+  const checkRef = useRef<boolean>(true);
+  const initRef = useRef<boolean>(true);
+  const [click, setClick] = useState<boolean>(true);
+  const gameBoard = useMemo(() => initBoard.sort(() => Math.random() - 0.5), []);
+
+  console.log("Game 컴포넌트 렌더링")
+
+  function checkCard() {
+    const open = openRef.current;
+  
+    if (open.length === gameBoard.length) {
+      console.log("승리");
+    };
+  
+    if (open.length % 2 === 1) {
+      return;
+    };
+
+    const current = gameBoard[open[open.length - 1]];
+    const before = gameBoard[open[open.length - 2]];
+
+    if (checkRef.current === true) {
+      return;
+    };
+  
+    if (current !== before) {
+      checkRef.current = true;
+  
+      setTimeout(() => {
+        open.pop();
+        open.pop();
+        setClick(!click);
+        checkRef.current = false;
+      }, 500)
+    };
+  };
+
+  if (!initRef.current) {
+    checkCard();
+  } else {
+    setTimeout(() => {
+      openRef.current = [];
+      checkRef.current = false;
+      initRef.current = false;
+      setClick(false);
+    }, 2000)
+  }
 
   return (
     <>
-      <div>짝 맞추기 게임</div>
+      <Title>짝 맞추기 게임</Title>
       <Board>
         {gameBoard.map((element, index) => (
-          <Card key={index} id={element.id} image={element.image}/>
+          <Card 
+            key={index}
+            number={index}
+            image={images[element]}
+            openRef={openRef}
+            checkRef={checkRef}
+            click={click}
+            setClick={setClick}
+          />
         ))}
       </Board>
     </>
