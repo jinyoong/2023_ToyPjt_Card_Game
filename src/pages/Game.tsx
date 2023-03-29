@@ -45,7 +45,7 @@ function Game () {
       isSuccessRef.current = true;
     };
   
-    if (open.length % 2 === 1) {
+    if (open.length % 2) {
       return;
     };
 
@@ -74,7 +74,7 @@ function Game () {
 
   useEffect(() => {
     isSuccessRef.current = false;
-    openRef.current = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    openRef.current = new Array(16).fill(0).map((arr, i) => i);
     checkRef.current = true;
     setInitRender(true);
 

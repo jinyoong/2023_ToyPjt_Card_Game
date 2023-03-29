@@ -41,6 +41,11 @@ function Card({ number, image, openRef, checkRef, click, setClick }: PropsType) 
 
   function changeStatus() {
     const open = openRef.current;
+    const check = checkRef.current;
+    
+    if (check) {
+      return;
+    };
 
     if (!open) {
       return;
@@ -55,7 +60,7 @@ function Card({ number, image, openRef, checkRef, click, setClick }: PropsType) 
   };
 
   return (
-    <Image isFront={openRef.current?.includes(number) ? true : false} onClick={() => !checkRef.current && changeStatus()}>
+    <Image isFront={!!openRef.current?.includes(number)} onClick={() => changeStatus()}>
       <Front
         src={image}
         alt={"사진"}
