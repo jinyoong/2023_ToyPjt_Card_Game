@@ -12,10 +12,27 @@ const Background = styled.div`
 `
 
 const Content = styled.div`
-  width: 60%;
-  height: 60%;
+  width: 400px;
+  height: 500px;
   background-color: white;
   border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const Button = styled.button`
+  width: 100px;
+  height: 2rem;
+  border-radius: 5px;
+  background-color: yellow;
+  border-style: solid;
+  font-weight: bold;
+  :hover {
+    cursor: pointer;
+    background-color: #f5f56b;
+  }
 `
 
 type PropsType = {
@@ -32,8 +49,8 @@ function Modal({ restart, setRestart }: PropsType) {
   return  (
     <Background>
       <Content>
-        성공했습니다!
-        <button onClick={() => clickEvent()}>다시하기</button>
+        <h3>성공했습니다!</h3>
+        <Button onClick={() => clickEvent()}>다시하기</Button>
       </Content>
     </Background>
   )
