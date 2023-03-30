@@ -9,7 +9,7 @@ import image5 from "../images/image5.jpg";
 import image6 from "../images/image6.jpg";
 import image7 from "../images/image7.jpg";
 import image8 from "../images/image8.jpg";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 const Title = styled.div`
   font-weight: bold;
@@ -25,18 +25,38 @@ const Board = styled.div`
   align-content: space-between;
 `;
 
-const images: string[] = [image1, image2, image3, image4, image5, image6, image7, image8];
+const images = [image1, image2, image3, image4, image5, image6, image7, image8];
 
-const initBoard: number[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
+const initialBoard = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 
 function Game () {
-  const openRef = useRef<number[]>([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
-  const checkRef = useRef<boolean>(true);
-  const isSuccessRef = useRef<boolean>(false);
-  const [initRender, setInitRender] = useState<boolean>(true);
-  const [click, setClick] = useState<boolean>(true);
-  const [restart, setRestart] = useState<boolean>(true);
-  const gameBoard = useMemo(() => initBoard.sort(() => Math.random() - 0.5), [restart]);
+  const openRef = useRef(new Array(16).fill(0).map((arr, i) => i));
+  const checkRef = useRef(true);
+  const isSuccessRef = useRef(false);
+  const [initRender, setInitRender] = useState(true);
+  const [click, setClick] = useState(true);
+  const [gameBoard, setGameBoard] = useState<number[]>([]);
+  
+  const initGame = useCallback(() => {
+    setGameBoard(initialBoard.sort(() => Math.random() - 0.5));
+    setInitRender(true);
+    
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+    isSuccessRef.current = false;
+    openRef.current = new Array(16).fill(0).map((arr, i) => i);
+    checkRef.current = true;
+
+    if (timer) {
+      clearTimeout(timer);
+    };
+
+    timer = setTimeout(() => {
+      openRef.current = [];
+      checkRef.current = false;
+      setInitRender(false);
+    }, 2000)
+
+  }, []);
   
   function checkCard() {
     const open = openRef.current;
@@ -73,26 +93,14 @@ function Game () {
   }
 
   useEffect(() => {
-    isSuccessRef.current = false;
-    openRef.current = new Array(16).fill(0).map((arr, i) => i);
-    checkRef.current = true;
-    setInitRender(true);
-
-    const init = setTimeout(() => {
-      openRef.current = [];
-      checkRef.current = false;
-      setInitRender(false);
-    }, 2000)
-
-    return () => clearTimeout(init)
-  }, [restart])
+    initGame();
+  }, [initGame])
 
   return (
     <>
       {isSuccessRef.current ? 
       <Modal
-        restart={restart}
-        setRestart={setRestart}
+        initGame={initGame}
       /> : <></>}
       <Title>짝 맞추기 게임</Title>
       <Board>

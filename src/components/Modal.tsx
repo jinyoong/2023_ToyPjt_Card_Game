@@ -36,21 +36,16 @@ const Button = styled.button`
 `
 
 type PropsType = {
-  restart: boolean;
-  setRestart: React.Dispatch<React.SetStateAction<boolean>>;
+  initGame: () => void;
 }
 
-function Modal({ restart, setRestart }: PropsType) {
+function Modal({ initGame }: PropsType) {
   
-  function clickEvent() {
-    setRestart(!restart);
-  }
-
   return  (
     <Background>
       <Content>
         <h3>성공했습니다!</h3>
-        <Button onClick={() => clickEvent()}>다시하기</Button>
+        <Button onClick={initGame}>다시하기</Button>
       </Content>
     </Background>
   )
