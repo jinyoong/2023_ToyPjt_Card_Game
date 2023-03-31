@@ -31,8 +31,10 @@ const initialBoard = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 
 function Game () {
   const openRef = useRef(new Array(16).fill(0).map((arr, i) => i));
-  const checkRef = useRef(true);
+  const isCheckingRef = useRef(true);
   const isSuccessRef = useRef(false);
+  // isStart로 바꾸는게 나을듯 아니면 맞힌 카드 개수를 이용해서 성공 여부 판단하게 하기
+  // 애초에 isSuccessRef 랑 같은 역할인듯
   const [initRender, setInitRender] = useState(true);
   const [click, setClick] = useState(true);
   const [gameBoard, setGameBoard] = useState<number[]>([]);
@@ -44,7 +46,7 @@ function Game () {
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;
     isSuccessRef.current = false;
     openRef.current = new Array(16).fill(0).map((arr, i) => i);
-    checkRef.current = true;
+    isCheckingRef.current = true;
 
     if (timer) {
       clearTimeout(timer);
@@ -52,12 +54,13 @@ function Game () {
 
     timer = setTimeout(() => {
       openRef.current = [];
-      checkRef.current = false;
+      isCheckingRef.current = false;
       setInitRender(false);
     }, 2000)
 
   }, []);
   
+  // openRef랑 click을 selected 라는 state로 통합해서 관리할 수 있게 수정해보자
   function checkCard() {
     const open = openRef.current;
 
@@ -72,18 +75,18 @@ function Game () {
     const current = gameBoard[open[open.length - 1]];
     const before = gameBoard[open[open.length - 2]];
 
-    if (checkRef.current === true) {
+    if (isCheckingRef.current === true) {
       return;
     };
   
     if (current !== before) {
-      checkRef.current = true;
+      isCheckingRef.current = true;
   
       setTimeout(() => {
         open.pop();
         open.pop();
         setClick(!click);
-        checkRef.current = false;
+        isCheckingRef.current = false;
       }, 500)
     };
   };
@@ -110,7 +113,7 @@ function Game () {
             number={index}
             image={images[element]}
             openRef={openRef}
-            checkRef={checkRef}
+            isCheckingRef={isCheckingRef}
             click={click}
             setClick={setClick}
           />

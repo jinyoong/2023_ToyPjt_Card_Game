@@ -32,12 +32,12 @@ type PropsType = {
   number: number;
   image: string;
   openRef: React.RefObject<number[]>;
-  checkRef: React.RefObject<boolean>;
+  isCheckingRef: React.RefObject<boolean>;
   click: boolean;
   setClick: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Card({ number, image, openRef, checkRef, click, setClick }: PropsType) {
+function Card({ number, image, openRef, isCheckingRef: checkRef, click, setClick }: PropsType) {
 
   function changeStatus() {
     const open = openRef.current;
