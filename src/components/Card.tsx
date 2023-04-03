@@ -31,36 +31,14 @@ const Back = styled.div`
 type PropsType = {
   number: number;
   image: string;
-  openRef: React.RefObject<number[]>;
-  isCheckingRef: React.RefObject<boolean>;
-  click: boolean;
-  setClick: React.Dispatch<React.SetStateAction<boolean>>;
+  selected: number[];
+  selectCard: (cardIdx: number) => void;
 }
 
-function Card({ number, image, openRef, isCheckingRef: checkRef, click, setClick }: PropsType) {
-
-  function changeStatus() {
-    const open = openRef.current;
-    const check = checkRef.current;
-    
-    if (check) {
-      return;
-    };
-
-    if (!open) {
-      return;
-    };
-
-    if (open.includes(number)) {
-      return;
-    }
-
-    open.push(number);
-    setClick(!click);
-  };
+function Card({ number, image, selected, selectCard}: PropsType) {
 
   return (
-    <Image isFront={!!openRef.current?.includes(number)} onClick={() => changeStatus()}>
+    <Image isFront={selected.includes(number)} onClick={() => selectCard(number)}>
       <Front
         src={image}
         alt={"사진"}
