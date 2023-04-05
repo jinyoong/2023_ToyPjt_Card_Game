@@ -39,9 +39,9 @@ function Game () {
   const [gameBoard, setGameBoard] = useState<number[]>([]);
   
   const initGame = useCallback(() => {
-    setGameBoard(initialBoard.sort(() => Math.random() - 0.5));
     setSelected(new Array(16).fill(0).map((ele, idx) => idx));
     setInitRender(true);
+    setGameBoard(initialBoard.sort(() => Math.random() - 0.5));
     
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;
     isSuccessRef.current = false;
@@ -73,8 +73,7 @@ function Game () {
     setSelected([...selected, cardIdx]);
   };
   
-  // openRef랑 click을 selected 라는 state로 통합해서 관리할 수 있게 수정해보자
-  function checkCard() {
+  const checkCard = () => {
     if (initRender) {
       return;
     };
