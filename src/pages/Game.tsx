@@ -31,9 +31,8 @@ const initialBoard = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7];
 
 function Game () {
   const isCheckingRef = useRef(true);
-  const isSuccessRef = useRef(false);
-  // isStart로 바꾸는게 나을듯 아니면 맞힌 카드 개수를 이용해서 성공 여부 판단하게 하기
-  // 애초에 isSuccessRef 랑 같은 역할인듯
+  const isModalOepnRef = useRef(false);
+  const clickCountRef = useRef(0);
   const [selected, setSelected] = useState(new Array(16).fill(0).map((ele, idx) => idx));
   const [initRender, setInitRender] = useState(true);
   const [gameBoard, setGameBoard] = useState<number[]>([]);
@@ -44,8 +43,9 @@ function Game () {
     setGameBoard(initialBoard.sort(() => Math.random() - 0.5));
     
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;
-    isSuccessRef.current = false;
+    isModalOepnRef.current = false;
     isCheckingRef.current = true;
+    clickCountRef.current = 0;
 
     if (timer) {
       clearTimeout(timer);
@@ -71,6 +71,7 @@ function Game () {
     };
 
     setSelected([...selected, cardIdx]);
+    clickCountRef.current += 1;
   };
   
   const checkCard = () => {
@@ -79,7 +80,7 @@ function Game () {
     };
 
     if (selected.length === gameBoard.length) {
-      isSuccessRef.current = true;
+      isModalOepnRef.current = true;
     };
   
     if (selected.length % 2) {
@@ -111,11 +112,13 @@ function Game () {
 
   return (
     <>
-      {isSuccessRef.current ? 
+      {isModalOepnRef.current ? 
       <Modal
         initGame={initGame}
+        clickCount={clickCountRef.current}
       /> : <></>}
       <Title>짝 맞추기 게임</Title>
+      클릭한 횟수 : {clickCountRef.current} 회
       <Board>
         {gameBoard.map((element, index) => (
           <Card 

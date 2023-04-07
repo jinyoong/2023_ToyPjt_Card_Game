@@ -37,14 +37,15 @@ const Button = styled.button`
 
 type PropsType = {
   initGame: () => void;
+  clickCount: number;
 }
 
-function Modal({ initGame }: PropsType) {
+function Modal({ initGame, clickCount }: PropsType) {
   
   return  (
     <Background>
       <Content>
-        <h3>성공했습니다!</h3>
+        <h3>{clickCount}번 클릭해서 성공했습니다!</h3>
         <Button onClick={initGame}>다시하기</Button>
       </Content>
     </Background>
